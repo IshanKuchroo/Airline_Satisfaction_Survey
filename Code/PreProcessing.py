@@ -297,6 +297,28 @@ plt.tight_layout()
 plt.show()
 print("#" * 100)
 
+pca = PCA(n_components=15, svd_solver='full')
+# pca = PCA(0.95)
+principalComponents = pca.fit_transform(X)
+
+a, b = principalComponents.shape
+
+column = []
+
+for i in range(b):
+    column.append(f"Principal Component {i + 1}")
+
+df_PCA = pd.DataFrame(principalComponents, columns=column)
+
+df_PCA = pd.concat([df_PCA], axis=1)
+
+H = np.matmul(df_PCA.T, df_PCA)
+
+s, d, v = np.linalg.svd(H, full_matrices=True)
+
+print(f"Singular value of PCA dataframe are {d}")
+print(f"Condition number for PCA dataframe is {LA.cond(df_PCA)}")
+
 #####################################################################
 # ------------------ Correlation Matrix ------------------ #
 ####################################################################
